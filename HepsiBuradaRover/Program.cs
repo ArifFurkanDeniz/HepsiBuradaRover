@@ -23,7 +23,7 @@ namespace HepsiBuradaRover
                 {
                     switch (item)
                     {
-                        case 'M': if ( edgeY >= roverY + 1) roverY++; break;
+                        case 'M': if (edgeY >= roverY + 1) roverY++; break;
                         case 'L': currentRotation = 'W'; break;
                         case 'R': currentRotation = 'E'; break;
                         default:
