@@ -8,12 +8,17 @@ namespace HepsiBuradaRover
     {
         static string upperRight;
         static int edgeX, edgeY;
-        static Rover rover1, rover2;
+        readonly static int roverCount = 2;
+        static Rover[] roverList = new Rover[roverCount];
         static void Main(string[] args)
         {
             GetInputs();
-            CalculatePoint(rover1);
-            CalculatePoint(rover2);       
+
+            foreach (var rover in roverList)
+            {
+                CalculatePoint(rover);
+            }
+              
         }
 
         private static void CalculatePoint(Rover rover)
@@ -88,63 +93,36 @@ namespace HepsiBuradaRover
             edgeY = Convert.ToInt16(upperRight[1].ToString());
 
 
-           var position = Console.ReadLine().ToUpper();
-            while (true)
+            for (int i = 0; i < roverCount; i++)
             {
-                Regex regex = new Regex(@"^\d\d[NWSE]$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(position))
-                    break;
-                else
+                var position = Console.ReadLine().ToUpper();
+                while (true)
                 {
-                    Console.WriteLine("Wrong input! example: 12N");
+                    Regex regex = new Regex(@"^\d\d[NWSE]$", RegexOptions.IgnoreCase);
+                    if (regex.IsMatch(position))
+                        break;
+                    else
+                    {
+                        Console.WriteLine("Wrong input! example: 12N");
+                    }
+                    position = Console.ReadLine().ToUpper();
                 }
-                position = Console.ReadLine().ToUpper();
-            }
 
-            var movement = Console.ReadLine().ToUpper();
-            while (true)
-            {
-                Regex regex = new Regex(@"^[LRM]*$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(movement))
-                    break;
-                else
+                var movement = Console.ReadLine().ToUpper();
+                while (true)
                 {
-                    Console.WriteLine("Wrong input! example: LMLMLMLMM");
+                    Regex regex = new Regex(@"^[LRM]*$", RegexOptions.IgnoreCase);
+                    if (regex.IsMatch(movement))
+                        break;
+                    else
+                    {
+                        Console.WriteLine("Wrong input! example: LMLMLMLMM");
+                    }
+                    movement = Console.ReadLine().ToUpper();
                 }
-                movement = Console.ReadLine().ToUpper();
+
+                roverList[i] = new Rover(position, movement);
             }
-
-            rover1 = new Rover(position, movement);
-
-            position = Console.ReadLine().ToUpper();
-            while (true)
-            {
-                Regex regex = new Regex(@"^\d\d[NWSE]$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(position))
-                    break;
-                else
-                {
-                    Console.WriteLine("Wrong input! example: 33E");
-                }
-                position = Console.ReadLine().ToUpper();
-            }
-
-
-            movement = Console.ReadLine().ToUpper();
-            while (true)
-            {
-                Regex regex = new Regex(@"^[LRM]*$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(movement))
-                    break;
-                else
-                {
-                    Console.WriteLine("Wrong input! example: MMRMMRMRRM");
-                }
-                movement = Console.ReadLine().ToUpper();
-            }
-
-            rover2 = new Rover(position, movement);
-
         }
     }
 }
