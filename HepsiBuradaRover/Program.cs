@@ -1,71 +1,72 @@
-﻿using System;
+﻿using HepsiBuradaRover.Model;
+using System;
 using System.Text.RegularExpressions;
 
 namespace HepsiBuradaRover
 {
     class Program
     {
-        static string upperRight, rover1Position, rover1Movement,rover2Position, rover2Movement;
-        static int rover1X, rover1Y, rover2X, rover2Y, edgeX, edgeY;
+        static string upperRight;
+        static int edgeX, edgeY;
+        static Rover rover1, rover2;
         static void Main(string[] args)
         {
             GetInputs();
-            CalculatePoint(rover1Position[2], rover1Movement, rover1X, rover1Y);
-            CalculatePoint(rover2Position[2], rover2Movement, rover2X, rover2Y);
-        
+            CalculatePoint(rover1);
+            CalculatePoint(rover2);       
         }
 
-        private static void CalculatePoint(char currentRotation, string roverMovement, int roverX, int roverY)
+        private static void CalculatePoint(Rover rover)
         {
-            foreach (var item in roverMovement)
+            foreach (var item in rover.Movement)
             {
-                if (currentRotation == 'N')
+                if (rover.Rotation == 'N')
                 {
                     switch (item)
                     {
-                        case 'M': if (edgeY >= roverY + 1) roverY++; break;
-                        case 'L': currentRotation = 'W'; break;
-                        case 'R': currentRotation = 'E'; break;
+                        case 'M': if (edgeY >= rover.Y + 1) rover.Y++; break;
+                        case 'L': rover.Rotation = 'W'; break;
+                        case 'R': rover.Rotation = 'E'; break;
                         default:
                             break;
                     }
                 }
-                else if (currentRotation == 'S')
+                else if (rover.Rotation == 'S')
                 {
                     switch (item)
                     {
-                        case 'M': if (0 <= roverY - 1) roverY--; break;
-                        case 'L': currentRotation = 'E'; break;
-                        case 'R': currentRotation = 'W'; break;
+                        case 'M': if (0 <= rover.Y - 1) rover.Y--; break;
+                        case 'L': rover.Rotation = 'E'; break;
+                        case 'R': rover.Rotation = 'W'; break;
                         default:
                             break;
                     }
                 }
-                else if (currentRotation == 'W')
+                else if (rover.Rotation == 'W')
                 {
                     switch (item)
                     {
-                        case 'M': if (0 <= roverX - 1) roverX--; break;
-                        case 'L': currentRotation = 'S'; break;
-                        case 'R': currentRotation = 'N'; break;
+                        case 'M': if (0 <= rover.X - 1) rover.X--; break;
+                        case 'L': rover.Rotation = 'S'; break;
+                        case 'R': rover.Rotation = 'N'; break;
                         default:
                             break;
                     }
                 }
-                else if (currentRotation == 'E')
+                else if (rover.Rotation == 'E')
                 {
                     switch (item)
                     {
-                        case 'M': if (edgeX >= roverX + 1)  roverX++; break;
-                        case 'L': currentRotation = 'N'; break;
-                        case 'R': currentRotation = 'S'; break;
+                        case 'M': if (edgeX >= rover.X + 1) rover.X++; break;
+                        case 'L': rover.Rotation = 'N'; break;
+                        case 'R': rover.Rotation = 'S'; break;
                         default:
                             break;
                     }
                 }
             }
 
-            Console.WriteLine(roverX + " " + roverY + " " + currentRotation);    
+            Console.WriteLine(rover.Position);    
         }
            
         private static void GetInputs()
@@ -86,64 +87,63 @@ namespace HepsiBuradaRover
             edgeX = Convert.ToInt16(upperRight[0].ToString());
             edgeY = Convert.ToInt16(upperRight[1].ToString());
 
-            rover1Position = Console.ReadLine().ToUpper();
+
+           var position = Console.ReadLine().ToUpper();
             while (true)
             {
                 Regex regex = new Regex(@"^\d\d[NWSE]$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(rover1Position))
+                if (regex.IsMatch(position))
                     break;
                 else
                 {
                     Console.WriteLine("Wrong input! example: 12N");
                 }
-                rover1Position = Console.ReadLine().ToUpper();
+                position = Console.ReadLine().ToUpper();
             }
-        
-            rover1X = Convert.ToInt32(rover1Position[0].ToString());
-            rover1Y = Convert.ToInt32(rover1Position[1].ToString());
 
-
-            rover1Movement = Console.ReadLine().ToUpper();
+            var movement = Console.ReadLine().ToUpper();
             while (true)
             {
                 Regex regex = new Regex(@"^[LRM]*$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(rover1Movement))
+                if (regex.IsMatch(movement))
                     break;
                 else
                 {
                     Console.WriteLine("Wrong input! example: LMLMLMLMM");
                 }
-                rover1Movement = Console.ReadLine().ToUpper();
+                movement = Console.ReadLine().ToUpper();
             }
 
-            rover2Position = Console.ReadLine().ToUpper();
+            rover1 = new Rover(position, movement);
+
+            position = Console.ReadLine().ToUpper();
             while (true)
             {
                 Regex regex = new Regex(@"^\d\d[NWSE]$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(rover2Position))
+                if (regex.IsMatch(position))
                     break;
                 else
                 {
                     Console.WriteLine("Wrong input! example: 33E");
                 }
-                rover2Position = Console.ReadLine().ToUpper();
+                position = Console.ReadLine().ToUpper();
             }
 
-            rover2X = Convert.ToInt32(rover2Position[0].ToString());
-            rover2Y = Convert.ToInt32(rover2Position[1].ToString());
 
-            rover2Movement = Console.ReadLine().ToUpper();
+            movement = Console.ReadLine().ToUpper();
             while (true)
             {
                 Regex regex = new Regex(@"^[LRM]*$", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(rover2Movement))
+                if (regex.IsMatch(movement))
                     break;
                 else
                 {
                     Console.WriteLine("Wrong input! example: MMRMMRMRRM");
                 }
-                rover2Movement = Console.ReadLine().ToUpper();
+                movement = Console.ReadLine().ToUpper();
             }
+
+            rover2 = new Rover(position, movement);
 
         }
     }
