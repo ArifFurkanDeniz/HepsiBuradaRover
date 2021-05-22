@@ -1,4 +1,4 @@
-﻿using HepsiBuradaRover.Model;
+﻿using HepsiBuradaModel;
 using System;
 using System.Text.RegularExpressions;
 
@@ -9,69 +9,15 @@ namespace HepsiBuradaRover
         static string upperRight;
         static int edgeX, edgeY;
         readonly static int roverCount = 2;
-        static Rover[] roverList = new Rover[roverCount];
+        static IRover[] roverList = new Rover[roverCount];
         static void Main(string[] args)
         {
             GetInputs();
 
             foreach (var rover in roverList)
             {
-                CalculatePoint(rover);
-            }
-              
-        }
-
-        private static void CalculatePoint(Rover rover)
-        {
-            foreach (var item in rover.Movement)
-            {
-                if (rover.Rotation == 'N')
-                {
-                    switch (item)
-                    {
-                        case 'M': if (edgeY >= rover.Y + 1) rover.Y++; break;
-                        case 'L': rover.Rotation = 'W'; break;
-                        case 'R': rover.Rotation = 'E'; break;
-                        default:
-                            break;
-                    }
-                }
-                else if (rover.Rotation == 'S')
-                {
-                    switch (item)
-                    {
-                        case 'M': if (0 <= rover.Y - 1) rover.Y--; break;
-                        case 'L': rover.Rotation = 'E'; break;
-                        case 'R': rover.Rotation = 'W'; break;
-                        default:
-                            break;
-                    }
-                }
-                else if (rover.Rotation == 'W')
-                {
-                    switch (item)
-                    {
-                        case 'M': if (0 <= rover.X - 1) rover.X--; break;
-                        case 'L': rover.Rotation = 'S'; break;
-                        case 'R': rover.Rotation = 'N'; break;
-                        default:
-                            break;
-                    }
-                }
-                else if (rover.Rotation == 'E')
-                {
-                    switch (item)
-                    {
-                        case 'M': if (edgeX >= rover.X + 1) rover.X++; break;
-                        case 'L': rover.Rotation = 'N'; break;
-                        case 'R': rover.Rotation = 'S'; break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            Console.WriteLine(rover.Position);    
+                rover.CalculatePoint(edgeX, edgeY);
+            }   
         }
            
         private static void GetInputs()
